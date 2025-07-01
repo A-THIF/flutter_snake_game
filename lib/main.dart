@@ -1,46 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:snake_game_app/controls.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 void main() async {
+  // Sets up Flutter's internal system.
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Lock device in landscape mode
+  // Force landscape mode (like classic snake game).
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
 
-  // Hide system UI
+  // Hides top status bar and bottom navigation.
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
-  // Keep screen awake using wakelock_plus
+  // Keeps the screen ON (useful for games).
   await WakelockPlus.enable();
 
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
+  // Launch the game screen
+  runApp(
+    const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BlackScreen(),
-    );
-  }
-}
-
-class BlackScreen extends StatelessWidget {
-  const BlackScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.black,
-      body: SizedBox.expand(), // Fills screen
-    );
-  }
+      home: GameController(),
+    ),
+  );
 }
