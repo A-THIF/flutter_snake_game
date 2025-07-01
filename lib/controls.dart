@@ -57,6 +57,13 @@ class _GameControllerState extends State<GameController> {
         if (next.dy < 0) next = Offset(next.dx, screenSize!.height);
         if (next.dy > screenSize!.height) next = Offset(next.dx, 0);
 
+        // 💥 SELF COLLISION CHECK
+        if (snake.contains(next)) {
+          timer?.cancel();
+          _showGameOverDialog();
+          return;
+        }
+
         if (apple.isEaten(next)) {
           maxLength += 1;
           apple.relocate(screenSize!);
@@ -67,6 +74,35 @@ class _GameControllerState extends State<GameController> {
           snake.removeLast();
         }
       });
+    });
+  }
+
+  void _showGameOverDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Game Over"),
+        content: Text("Your score: ${snake.length - 1}"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _resetGame();
+            },
+            child: const Text("Restart"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _resetGame() {
+    setState(() {
+      snake = [const Offset(200, 200)];
+      direction = const Offset(1, 0);
+      maxLength = 1;
+      apple.relocate(screenSize!);
+      _startGameLoop();
     });
   }
 
@@ -102,11 +138,36 @@ class _GameControllerState extends State<GameController> {
 
   @override
   Widget build(BuildContext context) {
-    // Inside build()
     return GestureControls(
       onLeftTap: () => setState(() => rotate('left')),
       onRightTap: () => setState(() => rotate('right')),
-      child: SnakeGame(snake: snake, apple: apple),
+      child: Stack(
+        children: [
+          // Game rendering
+          SnakeGame(snake: snake, apple: apple),
+
+          // Score Display
+          Positioned(
+            top: 20,
+            left: 20,
+            child: Text(
+              'Score: ${snake.length - 1}',
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                shadows: [
+                  Shadow(
+                    blurRadius: 4,
+                    color: Colors.black,
+                    offset: Offset(1, 1),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -3,6 +3,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
+final Random random = Random(); // Add this outside your class
+
 class Food {
   Offset position;
   final double radius;
@@ -11,9 +13,12 @@ class Food {
   Food({required this.position, this.radius = 16});
 
   void relocate(Size screenSize) {
-    final rand = Random();
-    final double x = rand.nextInt(screenSize.width.toInt() - 20).toDouble();
-    final double y = rand.nextInt(screenSize.height.toInt() - 20).toDouble();
+    const double margin =
+        60.0; // avoid edges (left/right) and top/bottom controls
+    final double x =
+        margin + (screenSize.width - 2 * margin) * (random.nextDouble());
+    final double y =
+        margin + (screenSize.height - 2 * margin) * (random.nextDouble());
     position = Offset(x, y);
   }
 

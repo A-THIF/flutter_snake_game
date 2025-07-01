@@ -20,7 +20,7 @@ class GestureControls extends StatelessWidget {
         Positioned.fill(
           child: Row(
             children: [
-              // LEFT TAP
+              // LEFT SIDE TAP AREA
               Expanded(
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
@@ -28,7 +28,7 @@ class GestureControls extends StatelessWidget {
                   child: Container(),
                 ),
               ),
-              // RIGHT TAP
+              // RIGHT SIDE TAP AREA
               Expanded(
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
