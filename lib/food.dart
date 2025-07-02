@@ -1,9 +1,8 @@
 import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
 
-final Random random = Random(); // Add this outside your class
+final Random random = Random();
 
 class Food {
   Offset position;

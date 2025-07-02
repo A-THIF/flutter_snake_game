@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'snake_painter.dart'; // For drawing logic
 import 'food.dart';
 

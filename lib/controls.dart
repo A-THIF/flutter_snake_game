@@ -14,12 +14,10 @@ class GameController extends StatefulWidget {
 class _GameControllerState extends State<GameController> {
   List<Offset> snake = [];
   Offset direction = const Offset(1, 0);
-  double speed = 0.1;
   int maxLength = 2;
   Timer? timer;
   late Food apple;
-  Size? screenSize;
-  bool _initialized = false;
+  Size? lastSize;
   DateTime lastTurnTime = DateTime.now();
   final Duration turnCooldown = Duration.zero;
 
@@ -31,33 +29,19 @@ class _GameControllerState extends State<GameController> {
     apple.loadImage('assets/icons8-apple-fruit-64.png');
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_initialized) return;
-
-    Size actualSize = MediaQuery.of(context).size;
-    if (screenSize != actualSize) {
-      screenSize = actualSize;
-    }
-
-    apple.relocate(screenSize!);
-    _startGameLoop();
-    _initialized = true;
-  }
-
-  void _startGameLoop() {
+  void _startGameLoop(Size size) {
+    timer?.cancel();
     timer = Timer.periodic(const Duration(milliseconds: 80), (_) {
       setState(() {
         final head = snake.first;
         Offset next = head + direction * 10;
 
-        if (next.dx < 0) next = Offset(screenSize!.width, next.dy);
-        if (next.dx > screenSize!.width) next = Offset(0, next.dy);
-        if (next.dy < 0) next = Offset(next.dx, screenSize!.height);
-        if (next.dy > screenSize!.height) next = Offset(next.dx, 0);
+        if (next.dx < 0) next = Offset(size.width, next.dy);
+        if (next.dx > size.width) next = Offset(0, next.dy);
+        if (next.dy < 0) next = Offset(next.dx, size.height);
+        if (next.dy > size.height) next = Offset(next.dx, 0);
 
-        // 💥 SELF COLLISION CHECK
+        // Self-collision check
         if (snake.contains(next)) {
           timer?.cancel();
           _showGameOverDialog();
@@ -66,7 +50,7 @@ class _GameControllerState extends State<GameController> {
 
         if (apple.isEaten(next)) {
           maxLength += 1;
-          apple.relocate(screenSize!);
+          apple.relocate(size);
         }
 
         snake.insert(0, next);
@@ -100,9 +84,8 @@ class _GameControllerState extends State<GameController> {
     setState(() {
       snake = [const Offset(200, 200)];
       direction = const Offset(1, 0);
-      maxLength = 1;
-      apple.relocate(screenSize!);
-      _startGameLoop();
+      maxLength = 2;
+      // apple will be relocated on next layout tick
     });
   }
 
@@ -138,36 +121,46 @@ class _GameControllerState extends State<GameController> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureControls(
-      onLeftTap: () => setState(() => rotate('left')),
-      onRightTap: () => setState(() => rotate('right')),
-      child: Stack(
-        children: [
-          // Game rendering
-          SnakeGame(snake: snake, apple: apple),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final Size size = Size(constraints.maxWidth, constraints.maxHeight);
 
-          // Score Display
-          Positioned(
-            top: 20,
-            left: 20,
-            child: Text(
-              'Score: ${snake.length - 1}',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                shadows: [
-                  Shadow(
-                    blurRadius: 4,
-                    color: Colors.black,
-                    offset: Offset(1, 1),
+        // Only start/reset loop if size changes
+        if (lastSize == null || lastSize != size) {
+          lastSize = size;
+          apple.relocate(size);
+          _startGameLoop(size);
+        }
+
+        return GestureControls(
+          onLeftTap: () => setState(() => rotate('left')),
+          onRightTap: () => setState(() => rotate('right')),
+          child: Stack(
+            children: [
+              SnakeGame(snake: snake, apple: apple),
+              Positioned(
+                top: 20,
+                left: 20,
+                child: Text(
+                  'Score: ${snake.length - 1}',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 4,
+                        color: Colors.black,
+                        offset: Offset(1, 1),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
