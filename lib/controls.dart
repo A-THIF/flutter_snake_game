@@ -71,13 +71,15 @@ class _GameControllerState extends State<GameController> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              _resetGame();
+              // _resetGame(); // Remove from here
             },
             child: const Text("Restart"),
           ),
         ],
       ),
-    );
+    ).then((_) {
+      _resetGame(); // This runs regardless of how the dialog was closed
+    });
   }
 
   void _resetGame() {
@@ -87,6 +89,9 @@ class _GameControllerState extends State<GameController> {
       maxLength = 2;
       // apple will be relocated on next layout tick
     });
+    if (lastSize != null) {
+      _startGameLoop(lastSize!);
+    }
   }
 
   void rotate(String side) {

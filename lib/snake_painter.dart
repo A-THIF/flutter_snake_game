@@ -16,7 +16,7 @@ class SnakePainter extends CustomPainter {
 
     for (int i = 0; i < body.length; i++) {
       final progress = i / body.length;
-      final radius = lerpDouble(16.0, 8.0, progress)!;
+      final radius = lerpDouble(10.0, 5.0, progress)!;
       final opacity = lerpDouble(1.0, 0.3, progress)!;
       paint.color = Colors.greenAccent.withAlpha((opacity * 255).toInt());
       canvas.drawCircle(body[i], radius, paint);
