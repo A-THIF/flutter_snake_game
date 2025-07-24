@@ -57,6 +57,7 @@ flutter:
   assets:
     - assets/icons8-apple-fruit-64.png
     - assets/snake_head_helmet.png
+    - assets/snake_body.png
 
 
   # To add assets to your application, add an assets section, like this:

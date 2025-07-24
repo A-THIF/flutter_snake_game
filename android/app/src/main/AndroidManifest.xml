@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="snake_game_app"
+        android:label="Snake Game"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

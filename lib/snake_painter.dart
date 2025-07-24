@@ -1,26 +1,53 @@
-import 'dart:ui';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'food.dart';
 
 class SnakePainter extends CustomPainter {
-  final List<Offset> body;
+  final List<Offset> snake;
+  final ui.Image headImage;
+  final ui.Image bodyImage;
   final Food apple;
 
-  SnakePainter(this.body, this.apple);
+  SnakePainter({
+    required this.snake,
+    required this.headImage,
+    required this.bodyImage,
+    required this.apple,
+  });
+
+  final double segmentSize = 50.0; // bigger
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = Colors.greenAccent;
-
-    for (int i = 0; i < body.length; i++) {
-      final progress = i / body.length;
-      final radius = lerpDouble(10.0, 5.0, progress)!;
-      final opacity = lerpDouble(1.0, 0.3, progress)!;
-      paint.color = Colors.greenAccent.withAlpha((opacity * 255).toInt());
-      canvas.drawCircle(body[i], radius, paint);
+    // Body first
+    for (int i = 1; i < snake.length; i++) {
+      final segment = snake[i];
+      final rect = Rect.fromCenter(
+        center: segment,
+        width: segmentSize,
+        height: segmentSize,
+      );
+      paintImage(
+        canvas: canvas,
+        rect: rect,
+        image: bodyImage,
+        fit: BoxFit.contain,
+      );
     }
+
+    // Head on top
+    final head = snake.first;
+    final headRect = Rect.fromCenter(
+      center: head,
+      width: segmentSize,
+      height: segmentSize,
+    );
+    paintImage(
+      canvas: canvas,
+      rect: headRect,
+      image: headImage,
+      fit: BoxFit.contain,
+    );
 
     // Draw glowing apple
     if (apple.image != null) {
