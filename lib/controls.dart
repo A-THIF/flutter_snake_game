@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'dart:ui' as ui; // ✅ for ui.Image
-import 'package:flutter/services.dart'; // ✅ for rootBundle
+import 'dart:ui' as ui;
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'snake_game.dart';
 import 'food.dart';
+import 'gesture_controls.dart';
 
 class GameController extends StatefulWidget {
   const GameController({super.key});
@@ -70,7 +71,6 @@ class _GameControllerState extends State<GameController> {
         if (next.dy < 0) next = Offset(next.dx, size.height);
         if (next.dy > size.height) next = Offset(next.dx, 0);
 
-        // Self-collision check
         if (snake.contains(next)) {
           timer?.cancel();
           _showGameOverDialog();
@@ -100,14 +100,13 @@ class _GameControllerState extends State<GameController> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              // _resetGame(); // Remove from here
             },
             child: const Text("Restart"),
           ),
         ],
       ),
     ).then((_) {
-      _resetGame(); // This runs regardless of how the dialog was closed
+      _resetGame();
     });
   }
 
@@ -116,7 +115,6 @@ class _GameControllerState extends State<GameController> {
       snake = [const Offset(200, 200)];
       direction = const Offset(1, 0);
       maxLength = 2;
-      // apple will be relocated on next layout tick
     });
     if (lastSize != null) {
       _startGameLoop(lastSize!);
@@ -181,22 +179,23 @@ class _GameControllerState extends State<GameController> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return Stack(
-          children: [
-            SnakeGame(
-              snake: snake,
-              apple: apple,
-              headImage: headImage!,
-              bodyImage: bodyImage!,
-              direction: direction,
-            ),
+        return GestureControls(
+          onLeftTap: () => setState(() => rotate('left')),
+          onRightTap: () => setState(() => rotate('right')),
+          child: Stack(
+            children: [
+              SnakeGame(
+                snake: snake,
+                apple: apple,
+                headImage: headImage!,
+                bodyImage: bodyImage!,
+                direction: direction,
+              ),
 
-            // ✅ Visible left arrow
-            Positioned(
-              left: 20,
-              bottom: 40,
-              child: GestureDetector(
-                onTap: () => setState(() => rotate('left')),
+              // ✅ Visible left arrow (centered vertically, no gesture here)
+              Positioned(
+                left: 20,
+                top: MediaQuery.of(context).size.height * 0.5 - 40,
                 child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
                   opacity: leftOpacity,
@@ -207,14 +206,11 @@ class _GameControllerState extends State<GameController> {
                   ),
                 ),
               ),
-            ),
 
-            // ✅ Visible right arrow
-            Positioned(
-              right: 20,
-              bottom: 40,
-              child: GestureDetector(
-                onTap: () => setState(() => rotate('right')),
+              // ✅ Visible right arrow (centered vertically, no gesture here)
+              Positioned(
+                right: 20,
+                top: MediaQuery.of(context).size.height * 0.5 - 40,
                 child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
                   opacity: rightOpacity,
@@ -225,28 +221,28 @@ class _GameControllerState extends State<GameController> {
                   ),
                 ),
               ),
-            ),
 
-            Positioned(
-              top: 20,
-              left: 20,
-              child: Text(
-                'Score: ${snake.length - 1}',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      blurRadius: 4,
-                      color: Colors.black,
-                      offset: Offset(1, 1),
-                    ),
-                  ],
+              Positioned(
+                top: 20,
+                left: 20,
+                child: Text(
+                  'Score: ${snake.length - 1}',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 4,
+                        color: Colors.black,
+                        offset: Offset(1, 1),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );

@@ -17,26 +17,28 @@ class GestureControls extends StatelessWidget {
     return Stack(
       children: [
         child,
-        Positioned.fill(
-          child: Row(
-            children: [
-              // LEFT SIDE TAP AREA
-              Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: onLeftTap,
-                  child: Container(),
-                ),
-              ),
-              // RIGHT SIDE TAP AREA
-              Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: onRightTap,
-                  child: Container(),
-                ),
-              ),
-            ],
+        // Left vertical strip
+        Positioned(
+          top: 0,
+          bottom: 0,
+          left: 0,
+          width: 80, // Adjust as needed
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: onLeftTap,
+            child: Container(color: Colors.transparent),
+          ),
+        ),
+        // Right vertical strip
+        Positioned(
+          top: 0,
+          bottom: 0,
+          right: 0,
+          width: 80, // Adjust as needed
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: onRightTap,
+            child: Container(color: Colors.transparent),
           ),
         ),
       ],
