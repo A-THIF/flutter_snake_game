@@ -178,6 +178,7 @@ class _GameControllerState extends State<GameController> {
                 apple: apple,
                 headImage: headImage!,
                 bodyImage: bodyImage!,
+                direction: direction,
               ),
               Positioned(
                 top: 20,

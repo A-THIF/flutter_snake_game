@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'snake_painter.dart'; // For drawing logic
+import 'snake_painter.dart';
 import 'food.dart';
 import 'dart:ui' as ui;
 
@@ -8,6 +8,7 @@ class SnakeGame extends StatelessWidget {
   final Food apple;
   final ui.Image headImage;
   final ui.Image bodyImage;
+  final Offset direction; // ✅ ADD THIS
 
   const SnakeGame({
     super.key,
@@ -15,6 +16,7 @@ class SnakeGame extends StatelessWidget {
     required this.apple,
     required this.bodyImage,
     required this.headImage,
+    required this.direction, // ✅ ADD THIS
   });
 
   @override
@@ -28,6 +30,7 @@ class SnakeGame extends StatelessWidget {
             apple: apple,
             headImage: headImage,
             bodyImage: bodyImage,
+            direction: direction, // ✅ FIXED!
           ),
         ),
       ),

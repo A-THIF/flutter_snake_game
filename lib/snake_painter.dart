@@ -1,25 +1,28 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'food.dart';
+import 'dart:math'; // Needed for pi
 
 class SnakePainter extends CustomPainter {
   final List<Offset> snake;
   final ui.Image headImage;
   final ui.Image bodyImage;
   final Food apple;
+  final Offset direction; // NEW!
 
   SnakePainter({
     required this.snake,
     required this.headImage,
     required this.bodyImage,
     required this.apple,
+    required this.direction, // NEW!
   });
 
   final double segmentSize = 50.0; // bigger
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Body first
+    // Draw body segments (skip head)
     for (int i = 1; i < snake.length; i++) {
       final segment = snake[i];
       final rect = Rect.fromCenter(
@@ -35,10 +38,28 @@ class SnakePainter extends CustomPainter {
       );
     }
 
-    // Head on top
+    // Draw rotated head on top
     final head = snake.first;
+
+    // Determine angle in radians
+    double angle = 0.0;
+    if (direction == const Offset(0, -1)) {
+      angle = 0; // Up
+    } else if (direction == const Offset(1, 0)) {
+      angle = pi / 2; // Right
+    } else if (direction == const Offset(0, 1)) {
+      angle = pi; // Down
+    } else if (direction == const Offset(-1, 0)) {
+      angle = -pi / 2; // Left
+    }
+
+    // Save, translate, rotate, draw, restore
+    canvas.save();
+    canvas.translate(head.dx, head.dy);
+    canvas.rotate(angle);
+
     final headRect = Rect.fromCenter(
-      center: head,
+      center: Offset.zero, // IMPORTANT when rotated
       width: segmentSize,
       height: segmentSize,
     );
@@ -48,6 +69,8 @@ class SnakePainter extends CustomPainter {
       image: headImage,
       fit: BoxFit.contain,
     );
+
+    canvas.restore();
 
     // Draw glowing apple
     if (apple.image != null) {
