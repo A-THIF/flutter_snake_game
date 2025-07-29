@@ -3,7 +3,6 @@ import 'dart:ui' as ui; // ✅ for ui.Image
 import 'package:flutter/services.dart'; // ✅ for rootBundle
 import 'package:flutter/material.dart';
 import 'snake_game.dart';
-import 'gesture_controls.dart';
 import 'food.dart';
 
 class GameController extends StatefulWidget {
@@ -25,6 +24,9 @@ class _GameControllerState extends State<GameController> {
   ui.Image? headImage;
   ui.Image? bodyImage;
   bool imagesLoaded = false;
+
+  double leftOpacity = 0.3;
+  double rightOpacity = 0.3;
 
   @override
   void initState() {
@@ -143,6 +145,18 @@ class _GameControllerState extends State<GameController> {
         (direction.dy + newDirection.dy != 0)) {
       direction = newDirection;
     }
+
+    if (isLeft) {
+      setState(() => leftOpacity = 1.0);
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (mounted) setState(() => leftOpacity = 0.3);
+      });
+    } else {
+      setState(() => rightOpacity = 1.0);
+      Future.delayed(const Duration(milliseconds: 200), () {
+        if (mounted) setState(() => rightOpacity = 0.3);
+      });
+    }
   }
 
   @override
@@ -157,7 +171,6 @@ class _GameControllerState extends State<GameController> {
       builder: (context, constraints) {
         final Size size = Size(constraints.maxWidth, constraints.maxHeight);
 
-        // Only start/reset loop if size changes
         if (lastSize == null || lastSize != size) {
           lastSize = size;
           apple.relocate(size);
@@ -168,41 +181,74 @@ class _GameControllerState extends State<GameController> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return GestureControls(
-          onLeftTap: () => setState(() => rotate('left')),
-          onRightTap: () => setState(() => rotate('right')),
-          child: Stack(
-            children: [
-              SnakeGame(
-                snake: snake,
-                apple: apple,
-                headImage: headImage!,
-                bodyImage: bodyImage!,
-                direction: direction,
-              ),
-              Positioned(
-                top: 20,
-                left: 20,
-                child: Text(
-                  'Score: ${snake.length - 1}',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+        return Stack(
+          children: [
+            SnakeGame(
+              snake: snake,
+              apple: apple,
+              headImage: headImage!,
+              bodyImage: bodyImage!,
+              direction: direction,
+            ),
+
+            // ✅ Visible left arrow
+            Positioned(
+              left: 20,
+              bottom: 40,
+              child: GestureDetector(
+                onTap: () => setState(() => rotate('left')),
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 200),
+                  opacity: leftOpacity,
+                  child: const Icon(
+                    Icons.arrow_left,
+                    size: 80,
                     color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        blurRadius: 4,
-                        color: Colors.black,
-                        offset: Offset(1, 1),
-                      ),
-                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+
+            // ✅ Visible right arrow
+            Positioned(
+              right: 20,
+              bottom: 40,
+              child: GestureDetector(
+                onTap: () => setState(() => rotate('right')),
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 200),
+                  opacity: rightOpacity,
+                  child: const Icon(
+                    Icons.arrow_right,
+                    size: 80,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+
+            Positioned(
+              top: 20,
+              left: 20,
+              child: Text(
+                'Score: ${snake.length - 1}',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                      blurRadius: 4,
+                      color: Colors.black,
+                      offset: Offset(1, 1),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         );
-      }, // ✅ closes the builder
-    ); // ✅ closes LayoutBuilder
-  } // ✅ closes build
+      },
+    );
+  }
 }
