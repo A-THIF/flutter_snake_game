@@ -54,45 +54,51 @@ class _SplashScreenState extends State<SplashScreen>
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // ✅ No image → solid black
+          // ✅ Solid background
+          Container(color: Colors.black),
 
-          // ✅ Logo + tilted text
+          // ✅ Centered logo + overlapping text
           Center(
             child: FadeTransition(
               opacity: _logoController,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Logo
                   Image.asset(
                     'assets/snake_head_helmet.png',
-                    width: 200,
-                    height: 200,
+                    width: 300,
+                    height: 300,
                   ),
-                  const SizedBox(height: 20),
-                  Transform.rotate(
-                    angle: -5 * math.pi / 180, // ~5 degrees tilt
-                    child: Stack(
-                      children: [
-                        Text(
-                          'Space Snake',
-                          style: TextStyle(
-                            fontFamily: 'Audiowide',
-                            fontSize: 36,
-                            foreground: Paint()
-                              ..style = PaintingStyle.stroke
-                              ..strokeWidth = 2
-                              ..color = Colors.white,
+
+                  // Overlap by using negative margin
+                  Transform.translate(
+                    offset: const Offset(0, -30), // adjust overlap
+                    child: Transform.rotate(
+                      angle: -5 * math.pi / 180,
+                      child: Stack(
+                        children: [
+                          Text(
+                            'Space Snake',
+                            style: TextStyle(
+                              fontFamily: 'Audiowide',
+                              fontSize: 36,
+                              foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 2
+                                ..color = Colors.white,
+                            ),
                           ),
-                        ),
-                        const Text(
-                          'Space Snake',
-                          style: TextStyle(
-                            fontFamily: 'Audiowide',
-                            fontSize: 36,
-                            color: Colors.black,
+                          const Text(
+                            'Space Snake',
+                            style: TextStyle(
+                              fontFamily: 'Audiowide',
+                              fontSize: 36,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],

@@ -93,4 +93,4 @@ flutter:
   fonts:
     - family: Audiowide
       fonts:
-        - asset: fonts/Audiowide-Regular.ttf
+        - asset: fonts/AudioWide/Audiowide-Regular.ttf
