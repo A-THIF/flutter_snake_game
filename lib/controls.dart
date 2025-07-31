@@ -20,14 +20,9 @@ class _GameControllerState extends State<GameController> {
   Timer? timer;
   late Food apple;
   Size? lastSize;
-  DateTime lastTurnTime = DateTime.now();
-  final Duration turnCooldown = Duration.zero;
   ui.Image? headImage;
   ui.Image? bodyImage;
   bool imagesLoaded = false;
-
-  double leftOpacity = 0.3;
-  double rightOpacity = 0.3;
 
   @override
   void initState() {
@@ -66,10 +61,18 @@ class _GameControllerState extends State<GameController> {
         final head = snake.first;
         Offset next = head + direction * 15;
 
-        if (next.dx < 0) next = Offset(size.width, next.dy);
-        if (next.dx > size.width) next = Offset(0, next.dy);
-        if (next.dy < 0) next = Offset(next.dx, size.height);
-        if (next.dy > size.height) next = Offset(next.dx, 0);
+        if (next.dx < 0) {
+          next = Offset(size.width, next.dy);
+        }
+        if (next.dx > size.width) {
+          next = Offset(0, next.dy);
+        }
+        if (next.dy < 0) {
+          next = Offset(next.dx, size.height);
+        }
+        if (next.dy > size.height) {
+          next = Offset(next.dx, 0);
+        }
 
         if (snake.contains(next)) {
           timer?.cancel();
@@ -121,40 +124,36 @@ class _GameControllerState extends State<GameController> {
     }
   }
 
-  void rotate(String side) {
-    final now = DateTime.now();
-    if (now.difference(lastTurnTime) < turnCooldown) return;
-    lastTurnTime = now;
+  void rotate(String input) {
+    Offset newDirection = direction;
 
-    final isLeft = side == 'left';
-    Offset newDirection;
-
-    if (direction == const Offset(1, 0)) {
-      newDirection = isLeft ? const Offset(0, -1) : const Offset(0, 1);
-    } else if (direction == const Offset(-1, 0)) {
-      newDirection = isLeft ? const Offset(0, 1) : const Offset(0, -1);
-    } else if (direction == const Offset(0, 1)) {
-      newDirection = isLeft ? const Offset(1, 0) : const Offset(-1, 0);
-    } else {
-      newDirection = isLeft ? const Offset(-1, 0) : const Offset(1, 0);
+    switch (input) {
+      case 'up':
+        newDirection = const Offset(0, -1);
+        break;
+      case 'down':
+        newDirection = const Offset(0, 1);
+        break;
+      case 'left':
+        newDirection = const Offset(-1, 0);
+        break;
+      case 'right':
+        newDirection = const Offset(1, 0);
+        break;
     }
 
-    if ((direction.dx + newDirection.dx != 0) ||
-        (direction.dy + newDirection.dy != 0)) {
+    // Reject if input is same direction
+    if (direction == newDirection) return;
+
+    // Reject if input is direct opposite
+    if ((direction.dx + newDirection.dx == 0 &&
+        direction.dy + newDirection.dy == 0)) {
+      return;
+    }
+
+    setState(() {
       direction = newDirection;
-    }
-
-    if (isLeft) {
-      setState(() => leftOpacity = 1.0);
-      Future.delayed(const Duration(milliseconds: 200), () {
-        if (mounted) setState(() => leftOpacity = 0.3);
-      });
-    } else {
-      setState(() => rightOpacity = 1.0);
-      Future.delayed(const Duration(milliseconds: 200), () {
-        if (mounted) setState(() => rightOpacity = 0.3);
-      });
-    }
+    });
   }
 
   @override
@@ -165,86 +164,66 @@ class _GameControllerState extends State<GameController> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final Size size = Size(constraints.maxWidth, constraints.maxHeight);
+    final screenSize = MediaQuery.of(context).size;
 
-        if (lastSize == null || lastSize != size) {
-          lastSize = size;
-          apple.relocate(size);
-          _startGameLoop(size);
-        }
+    if (!imagesLoaded) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-        if (!imagesLoaded) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    if (lastSize == null) {
+      lastSize = screenSize;
+      _startGameLoop(screenSize);
+    }
 
-        return GestureControls(
-          onLeftTap: () => setState(() => rotate('left')),
-          onRightTap: () => setState(() => rotate('right')),
-          child: Stack(
-            children: [
-              SnakeGame(
-                snake: snake,
-                apple: apple,
-                headImage: headImage!,
-                bodyImage: bodyImage!,
-                direction: direction,
-              ),
-
-              // ✅ Visible left arrow (centered vertically, no gesture here)
-              Positioned(
-                left: 20,
-                top: MediaQuery.of(context).size.height * 0.5 - 40,
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 200),
-                  opacity: leftOpacity,
-                  child: const Icon(
-                    Icons.arrow_left,
-                    size: 80,
-                    color: Colors.white,
+    return GestureControls(
+      child: Stack(
+        children: [
+          SnakeGame(
+            snake: snake,
+            apple: apple,
+            headImage: headImage!,
+            bodyImage: bodyImage!,
+            direction: direction,
+          ),
+          Positioned(
+            top: 20,
+            left: screenSize.width / 2 - 50,
+            child: Stack(
+              children: [
+                // Outline stroke
+                // Outline stroke
+                Text(
+                  'Score: ${snake.length - 1}',
+                  style: TextStyle(
+                    // ⬅️ REMOVE const here!
+                    fontFamily: 'Audiowide',
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 3
+                      ..color = Colors.black,
                   ),
                 ),
-              ),
-
-              // ✅ Visible right arrow (centered vertically, no gesture here)
-              Positioned(
-                right: 20,
-                top: MediaQuery.of(context).size.height * 0.5 - 40,
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 200),
-                  opacity: rightOpacity,
-                  child: const Icon(
-                    Icons.arrow_right,
-                    size: 80,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-
-              Positioned(
-                top: 20,
-                left: 20,
-                child: Text(
+                // Fill stays const:
+                Text(
                   'Score: ${snake.length - 1}',
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontFamily: 'Audiowide',
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        blurRadius: 4,
-                        color: Colors.black,
-                        offset: Offset(1, 1),
-                      ),
-                    ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        );
-      },
+        ],
+      ),
+      onLeftTap: () => rotate('left'),
+      onRightTap: () => rotate('right'),
+      onUpTap: () => rotate('up'),
+      onDownTap: () => rotate('down'),
     );
   }
 }
