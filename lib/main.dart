@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:snake_game_app/controls.dart';
 import 'package:snake_game_app/splash_screen.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
