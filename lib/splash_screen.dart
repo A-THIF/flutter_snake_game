@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math' as math;
-import 'controls.dart'; // ✅ your game screen
+import 'pages/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -34,9 +34,9 @@ class _SplashScreenState extends State<SplashScreen>
     });
 
     Timer(const Duration(seconds: 4), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const GameController()),
-      );
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
     });
   }
 
@@ -113,7 +113,7 @@ class _SplashScreenState extends State<SplashScreen>
             child: FadeTransition(
               opacity: _creditController,
               child: const Text(
-                'A game by A-THIF',
+                'A game by kuchu kuchu',
                 style: TextStyle(color: Colors.white70, fontSize: 14),
               ),
             ),
