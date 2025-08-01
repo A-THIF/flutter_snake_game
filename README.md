@@ -1,13 +1,13 @@
-# 🐍 Snake Game – Built with Flutter
+# 🐍 Space Snake – Built with Flutter
 
 A modern, offline remake of the classic **Snake Game**, handcrafted in **Flutter**.  
-This project explores how far you can go using **just gestures**, **custom drawing**, and **game logic** without any external engines like Flame.
+This project explores how far you can go using **just gestures**, **custom drawing**, and **pure Flutter**, no external engines.
 
 ---
 
 ## 🎯 Goal
 
-Recreate the **core Snake mechanics** in Flutter from scratch — no multiplayer, no ads, no internet — just simple, smooth, offline fun with intuitive controls.
+Recreate the **core Snake mechanics** in Flutter from scratch — no multiplayer, no ads, no internet — just smooth, satisfying, offline fun with intuitive tap controls.
 
 ---
 
@@ -20,26 +20,30 @@ Recreate the **core Snake mechanics** in Flutter from scratch — no multiplayer
 - ✅ **Score counter**
 - ✅ **Restart dialog**
 - ✅ **Improved gesture controls** — tap left/right sides to turn
-- ✅ **Visible mid-screen arrows** for clear control cues
+- ✅ **Visible mid-screen arrows** for clearer tap cues
+- ✅ **Sleek splash screen** with *Space Snake* branding
+- ✅ **Home Screen** with:
+  - Neon hex *START* button
+  - Rotating developer logo (tap for fun secrets!)
+  - Space-themed animated bubble background
 
 ---
 
-## 🆕 What’s New in v1.1
+## 🆕 What’s New in v1.2
 
-- ✅ Added **dedicated vertical left/right control strips**
-- ✅ Visible arrow icons centered for clearer tap targets
-- ✅ Better tap feedback with subtle opacity animation
-- ✅ Smoother, more responsive gameplay
-- ✅ Bug fixes and code clean-up
+- ✅ Brand new **Splash Screen**
+- ✅ Added **Home Screen** with animated *Space Snake* title
+- ✅ New **rotating snake helmet logo** in the corner — tap for hidden messages!
+- ✅ Neon hexagon glassmorphism **Start** button with electric blue glow
+- ✅ Space-themed animated bubbles background
 
-  ![WhatsApp Image 2025-07-29 at 13 35 08_5f7fad6a](https://github.com/user-attachments/assets/ee8d0e99-01c1-4798-bdeb-65f204544730)
-
+  ![Space Snake Preview](https://github.com/user-attachments/assets/ee8d0e99-01c1-4798-bdeb-65f204544730)
 
 ---
 
 ## 📱 Download APK
 
-### 📦 Latest Version: [**Snake Game v1.1**](https://github.com/A-THIF/Snake_Game_Flutter/releases/latest)
+### 📦 Latest Version: [**Snake Game v1.2**](https://github.com/A-THIF/Snake_Game_Flutter/releases/latest)
 
 [![Download](https://img.shields.io/badge/Download-APK-brightgreen)](https://github.com/A-THIF/Snake_Game_Flutter/releases/latest)
 
@@ -47,8 +51,8 @@ Recreate the **core Snake mechanics** in Flutter from scratch — no multiplayer
 
 ## 🧩 How to Play
 
-- 📲 **Tap the left/right edges** to turn the snake left or right
-- 🍎 Eat apples to grow longer and boost your score
+- 📲 **Tap the left/right edges** to turn the snake
+- 🍎 Eat apples to grow longer & boost your score
 - 🔄 Wrap around screen edges — no walls!
 - 💥 Game ends if you run into yourself
 
@@ -56,42 +60,35 @@ Recreate the **core Snake mechanics** in Flutter from scratch — no multiplayer
 
 ## 🛠️ Tech Stack
 
-- **Flutter** for rendering & UI
+- **Flutter** for UI & rendering
 - **Dart** & `Timer` for the game loop
-- **CustomPainter** for snake & apple graphics
-- **GestureDetector** for edge-based controls
+- **CustomPainter** for the snake, apple & visuals
+- **GestureDetector** for intuitive tap controls
 
 ---
 
 ## 🧠 Dev Journey Highlights
 
 ### 📌 Initial Ideas:
-- ✅ Tried gyroscope/tilt for movement — didn’t feel intuitive enough
-- ✅ Settled on **tap gestures** for simple, classic control
-- ✅ Built from scratch: no game engines, just Flutter widgets & canvas
+- ✅ Explored gyroscope + swipe — tap controls felt best
+- ✅ Built from scratch: no game engines, only Flutter widgets + canvas
+- ✅ Created reusable *Space Bubble* background & dev logo Easter egg
 
 ### ⚙️ Bugs & Fixes:
-- 🐛 Snake moving in partial screen only — fixed with layout callbacks
-- 🐛 Wrap-around glitches fixed with better coordinate math
-- 🐛 Gradle & APK signing issues solved for smooth publishing
+- 🐛 Snake wrap glitches — fixed with better coordinate logic
+- 🐛 Tap zones too small — added visible arrows + vertical strips
+- 🐛 Improved APK size & signing for smoother installs
 
 ---
 
 ## 🗺️ What’s Next?
 
-**Planned Experiments:**
-- 🎮 Drag-to-move mode
-- 🎮 D-Pad or on-screen joystick
-- 🎮 Continuous turn with long press
-
-**Visuals:**
-- ✨ Animate apple when eaten
-- ✨ Better snake body shading
-- ✨ Optional grid or border
-
-**Modes:**
-- 🔄 Endless survival (done)
-- ⏱️ Timed mode (planned)
+**Planned Features:**
+- 🎮 Customizable snake colors & helmet emotions
+- 🎮 Swipe, joystick & gyroscope modes
+- 🎮 More grounds — free play vs. classic obstacles
+- 🎮 Cloud saves with Firebase Auth
+- ✨ Smoother death screen & high score popups
 
 ---
 
@@ -99,16 +96,16 @@ Recreate the **core Snake mechanics** in Flutter from scratch — no multiplayer
 
 **Mohamed Athif (A-THIF)**  
 💡 Flutter developer & IoT tinkerer  
-🎮 Focused on intuitive game mechanics & minimalism  
+🎮 Focused on intuitive, minimalist game mechanics  
 🔗 [LinkedIn](https://www.linkedin.com/in/mohamedathif)
 
 ---
 
 ## 🏷️ Tags
 
-`#FlutterGame` `#SnakeGame` `#OpenSource` `#GestureControls` `#OfflineGame` `#Dart` `#MobileGame` `#CustomPainter` `#NoAds`
+`#FlutterGame` `#SnakeGame` `#OpenSource` `#GestureControls` `#OfflineGame` `#Dart` `#CustomPainter` `#NoAds` `#Glassmorphism`
 
 ---
 
-📌 **Download it, test it, and share your feedback!**  
-Your stars ⭐ and forks 🍴 help this tiny snake grow! 🐍🚀
+📌 **Download, test, and share your feedback!**  
+Your ⭐️ stars & forks 🍴 help this little snake grow! 🐍🚀
