@@ -37,8 +37,10 @@ Recreate the **core Snake mechanics** in Flutter from scratch — no multiplayer
 - ✅ Neon hexagon glassmorphism **Start** button with electric blue glow
 - ✅ Space-themed animated bubbles background
 
+ ![WhatsApp Image 2025-08-01 at 13 19 11_fb4db8d1](https://github.com/user-attachments/assets/3b487db0-f8c4-4460-ac18-54b35a7dd17e)
+  ![WhatsApp Image 2025-08-01 at 13 19 11_6c1b4ce0](https://github.com/user-attachments/assets/3239ffb9-1725-4e5a-9da9-bf1d85d862ca)
   ![Space Snake Preview](https://github.com/user-attachments/assets/ee8d0e99-01c1-4798-bdeb-65f204544730)
-
+ 
 ---
 
 ## 📱 Download APK
